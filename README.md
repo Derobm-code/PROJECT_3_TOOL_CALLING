@@ -18,7 +18,7 @@ This project explores how LLMs can interact with Python functions, how tool argu
 
 ## Architecture
 
- 
+```text
                     User question
                           |
                           v
@@ -42,11 +42,11 @@ This project explores how LLMs can interact with Python functions, how tool argu
                           |
                           v
                     Final answer
- 
+```
 
 ### RAG retrieval pipeline
 
- 
+```text
 Text documents
       |
       v
@@ -63,7 +63,7 @@ Relevant chunks
       |
       v
 Agent receives retrieved context
- 
+```
 
 ## Technology stack
 
@@ -78,7 +78,7 @@ Agent receives retrieved context
 
 ## Project structure
 
- 
+```text
 project-03-tool-calling/
 ├── main.py
 ├── tools.py
@@ -104,7 +104,7 @@ project-03-tool-calling/
     ├── test_tool_models.py
     ├── test_agent_logic.py
     └── test_rag.py
- 
+```
 
 *The tree above describes the intended project layout; adjust filenames if your repository differs.*
 
@@ -119,10 +119,10 @@ project-03-tool-calling/
 
 ### 1. Clone the repository
 
-   
+```bash
 git clone YOUR_GITHUB_REPOSITORY_URL
 cd project-03-tool-calling
- 
+```
 
 Replace `YOUR_GITHUB_REPOSITORY_URL` with the URL of your repository.
 
@@ -130,34 +130,41 @@ Replace `YOUR_GITHUB_REPOSITORY_URL` with the URL of your repository.
 
 Windows PowerShell:
 
+```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
- 
+```
 
 macOS/Linux:
 
-  
+```bash
 python -m venv .venv
 source .venv/bin/activate
- 
+```
+
 ### 3. Install dependencies
 
-  
+```bash
 pip install -r requirements.txt
+```
 
 ### 4. Download the local LLM
-  
+
+```bash
 ollama pull qwen3:1.7b
+```
 
 Make sure Ollama is running before launching the application.
 
 ## Run the application
 
+```bash
 python main.py
+```
 
 Example questions:
 
- 
+```text
 What is 25% of 840?
 
 Calculate 25% of 840 and then add 100.
@@ -169,7 +176,7 @@ According to my knowledge base, how is Python used for automation?
 According to my knowledge base, if a task takes 840 seconds
 and its duration is reduced by 25%, how much time is saved
 and how long remains?
- 
+```
 
 The agent can request relevant tools, receive their results, and continue the conversation until it produces a final response or reaches its iteration limit.
 
@@ -177,15 +184,15 @@ The agent can request relevant tools, receive their results, and continue the co
 
 Run all deterministic tests and end-to-end agent scenarios:
 
-  
+```bash
 python evaluate.py
- 
+```
 
 Run only the live agent scenarios:
 
-  
+```bash
 python evaluate_agent.py
- 
+```
 
 The evaluation checks:
 
@@ -209,18 +216,18 @@ User request:
 
 Expected tool sequence:
 
- 
+```text
 1. search_knowledge_base
 2. calculate_remaining_after_reduction
- 
+```
 
 Expected calculation:
 
- 
+```text
 Original duration: 840 seconds
 Time saved:        210 seconds
 Remaining duration: 630 seconds
- 
+```
 
 ## Engineering concepts demonstrated
 
