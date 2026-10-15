@@ -120,11 +120,9 @@ project-03-tool-calling/
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/Derobm-code/PROJECT_3_TOOL_CALLING.git
 cd project-03-tool-calling
 ```
-
-Replace `YOUR_GITHUB_REPOSITORY_URL` with the URL of your repository.
 
 ### 2. Create a virtual environment
 
