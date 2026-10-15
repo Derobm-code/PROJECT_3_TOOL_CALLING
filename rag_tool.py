@@ -6,12 +6,30 @@ from chunking import chunk_text
 
 ###############################retrieval logic##################################
 
-def load_documents(directory: str) -> dict[str, str]:
+def load_documents(directory: str | Path) -> dict[str, str]:
+    directory= Path(directory)
+
+    if not directory.exists():
+        raise FileNotFoundError(
+            f"Knowledge-base directory not found: {directory}"
+        )
+
+    if not directory.is_dir():
+        raise NotADirectoryError(
+            f"Knowledge-base path is not a directory: {directory}"
+        )
+
     documents = {}
 
-    for path in Path(directory).glob("*.txt"):
-        documents[path.name] = path.read_text(
-            encoding="utf-8"
+    for path in sorted(directory.glob("*.txt")):
+        text = path.read_text(encoding="utf-8").strip()
+
+        if text:
+            documents[path.name] = text
+
+    if not documents:
+        raise ValueError(
+            f"No non-empty .txt documents found in: {directory}"
         )
 
     return documents
@@ -20,7 +38,6 @@ def create_index(documents: dict[str, str]) -> list[dict]:
     index = []
 
     for filename, text in documents.items():
-
         chunks = chunk_text(
             text, chunk_size =100, overlap= 20,
         )
@@ -44,6 +61,9 @@ def search_index(
         index: list[dict],
         top_k: int = 3,
 ) -> list[dict]:
+
+    if not query.strip():
+        raise ValueError("Search query cannot be empty.")
 
     query_embedding = get_embedding(query)
 
@@ -80,34 +100,48 @@ def get_rag_index() -> list[dict]:
     global RAG_INDEX
 
     if RAG_INDEX is None:
-        documents = load_documents(str(DOCUMENTS_DIR))
+        documents = load_documents(DOCUMENTS_DIR)
 
         print(f"Loaded {len(documents)} documents.")
-
         print("Creating RAG index...")
-        RAG_INDEX = create_index(documents)
+
+        index = create_index(documents)
+
+        if not index:
+            raise ValueError(
+                "The knowledge base did not produce a searchable index."
+            )
+
+        RAG_INDEX = index
 
         print(f"Created {len(RAG_INDEX)} searchable chunks.")
         print("RAG index ready.")
 
+    return RAG_INDEX
+
 def search_knowledge_base(query: str) -> str:
     """
-    Search the knowldge base for information relevant to a query.
+    Search the local knowledge base for relevant information.
     
     Args:
         query: The user's question or search request.
         
     Returns:
-        The most relevant document chunks with similarity scores.
+        Relevant document chunks with source filenames and scores.
     """
+    query = query.strip()
+
+    if not query:
+        raise ValueError("Search query cannot be empty.")
+    
     index = get_rag_index()
 
     results = search_index(
-        query, RAG_INDEX, top_k=3,
+        query, index, top_k=3,
     )
 
     if not results:
-        return "No relevant information was found."
+        return "No relevant information was found in the knowledge base"
 
     output =[]
 

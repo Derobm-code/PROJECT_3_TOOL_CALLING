@@ -104,6 +104,7 @@ project-03-tool-calling/
     ├── test_tool_models.py
     ├── test_agent_logic.py
     └── test_rag.py
+    └── test_rag_errors.py
 ```
 
 *The tree above describes the intended project layout; adjust filenames if your repository differs.*
@@ -202,7 +203,7 @@ The evaluation checks:
 - Tool selection and ordering across selected scenarios
 - Expected results in multi-step workflows
 
-The current evaluation suite passed 20 unit tests and 3 end-to-end scenarios in the development environment.
+Evaluation: 23 unit tests and 3 end-to-end agent scenarios passed in the development environment.
 
 **Note:** Passing these tests verifies the implemented functions and selected scenarios. It does not guarantee that a local LLM will always choose the correct tool or produce a fully accurate answer.
 
